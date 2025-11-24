@@ -60,7 +60,7 @@ const App: React.FC = () => {
     <div className="flex flex-col h-screen bg-gray-950 text-white overflow-hidden font-sans selection:bg-neon-pink selection:text-white">
       
       {/* Header */}
-      <header className="h-14 border-b border-gray-800 flex items-center px-6 bg-gray-900 z-10">
+      <header className="h-14 border-b border-gray-800 flex items-center px-6 bg-gray-900 z-10 shrink-0">
         <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-neon-pink animate-pulse-slow"></div>
             <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
@@ -77,13 +77,13 @@ const App: React.FC = () => {
       <main className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
         {/* Left Panel: Code & Controls */}
-        <div className="lg:w-1/3 flex flex-col border-r border-gray-800 bg-gray-900/30">
+        <div className="lg:w-1/3 flex flex-col border-r border-gray-800 bg-gray-900/30 shrink-0">
           <div className="flex-1 p-4 overflow-hidden">
             <CodeViewer currentLine={currentStep.line} />
           </div>
           
           {/* Controls Area */}
-          <div className="p-6 bg-gray-900 border-t border-gray-800">
+          <div className="p-6 bg-gray-900 border-t border-gray-800 shrink-0">
              <div className="flex items-center justify-between mb-4">
                  <div className="flex gap-2">
                     <button 
@@ -134,28 +134,31 @@ const App: React.FC = () => {
         </div>
 
         {/* Right Panel: Visualization & AI */}
-        <div className="flex-1 flex flex-col relative bg-gray-950">
+        <div className="flex-1 flex flex-col relative bg-gray-950 min-w-0">
             
-            {/* Visualization Canvas */}
-            <div className="flex-1 p-6 overflow-hidden relative">
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none"></div>
-                <ScopeVisualizer scopeState={currentStep.scopeState} />
+            {/* Visualization Canvas - SCROLLABLE CONTAINER */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden relative scroll-smooth custom-scrollbar">
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none fixed"></div>
+                {/* Padding wrapper inside scroll view */}
+                <div className="p-6 min-h-full">
+                    <ScopeVisualizer scopeState={currentStep.scopeState} />
+                </div>
             </div>
 
             {/* AI Explanation Bar */}
-            <div className="min-h-[140px] bg-gray-900 border-t border-gray-800 p-6 flex gap-4">
-                <div className="mt-1">
+            <div className="bg-gray-900 border-t border-gray-800 p-4 lg:p-6 flex gap-4 shrink-0 z-20 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
+                <div className="mt-1 shrink-0">
                     <div className={`p-2 rounded-full ${isAiLoading ? 'bg-neon-pink/20 text-neon-pink animate-spin' : 'bg-gray-800 text-neon-blue'}`}>
                         <BrainCircuit size={20} />
                     </div>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-2">
                         <h3 className="font-bold text-sm text-gray-300">AI Instructor</h3>
                         <button 
                            onClick={handleAskAI}
                            disabled={isAiLoading}
-                           className="text-[10px] px-2 py-1 border border-gray-700 hover:border-neon-blue text-gray-400 hover:text-white rounded transition-colors"
+                           className="text-[10px] px-2 py-1 border border-gray-700 hover:border-neon-blue text-gray-400 hover:text-white rounded transition-colors shrink-0 ml-2"
                         >
                            {isAiLoading ? 'Thinking...' : 'Deep Explain This Step'}
                         </button>

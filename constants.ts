@@ -11,17 +11,22 @@ export const DEMO_CODE = `function createCounter() {
 
 const myCounter = createCounter(); // 🎒 闭包产生 (Backpack created)
 const val1 = myCounter();          // 1️⃣ 第一次调用
-const val2 = myCounter();          // 2️⃣ 第二次调用`;
+const val2 = myCounter();          // 2️⃣ 第二次调用
+
+function unusedFn() {}             // 👻 写在最后，但也会被提升`;
+
+const UNUSED_FN_VAR = { name: 'unusedFn', value: 'function', isClosure: false, highlight: false, id: 'g_unused' };
 
 export const DEMO_STEPS: CodeStep[] = [
   {
     line: 0,
-    description: "⚡️ 【预编译阶段】(Step 0) 代码未执行。注意看底部全局变量：\n1. `createCounter` 是函数声明，直接被提升(Hoist)且可用。\n2. `myCounter` 被扫描到了，但处于 <TDZ> (暂时性死区) 🔒，被锁住不可访问。",
+    description: "⚡️ 【预编译阶段】(Step 0) 代码未执行。注意看底部全局变量：\n1. `createCounter` 和 `unusedFn` (第13行) 都是函数声明，无论写在哪里，都被完全提升(Hoist)且可用。\n2. `myCounter` 处于 <TDZ> (死区) 🔒，只占了位，不可访问。",
     actionType: 'init',
     scopeState: {
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: true, id: 'g1' },
-        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: true, id: 'g2_tdz' } // Added myCounter
+        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: true, id: 'g2_tdz' },
+        { ...UNUSED_FN_VAR, highlight: true }
       ],
       stack: [{ name: 'Global (全局)', variables: [], id: 'main', isActive: true }],
       closureBag: []
@@ -29,12 +34,13 @@ export const DEMO_STEPS: CodeStep[] = [
   },
   {
     line: 1,
-    description: "👀 【执行第1行】引擎读到函数声明。因为 Step 0 已经处理过了，所以引擎直接**跳过**函数体。此时 `myCounter` 依然是死区状态。",
+    description: "👀 【执行第1行】引擎读到函数声明。因为 Step 0 已经提升过了，所以引擎直接**跳过**函数体。",
     actionType: 'define',
     scopeState: {
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
-        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: false, id: 'g2_tdz' } // Persist TDZ
+        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: false, id: 'g2_tdz' },
+        UNUSED_FN_VAR
       ],
       stack: [{ name: 'Global (全局)', variables: [], id: 'main', isActive: true }],
       closureBag: []
@@ -47,7 +53,8 @@ export const DEMO_STEPS: CodeStep[] = [
     scopeState: {
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
-        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: true, id: 'g2_tdz' } // Still TDZ until return
+        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: true, id: 'g2_tdz' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: false },
@@ -63,7 +70,8 @@ export const DEMO_STEPS: CodeStep[] = [
     scopeState: {
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
-        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: false, id: 'g2_tdz' }
+        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: false, id: 'g2_tdz' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: false },
@@ -84,7 +92,8 @@ export const DEMO_STEPS: CodeStep[] = [
     scopeState: {
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
-        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: false, id: 'g2_tdz' }
+        { name: 'myCounter', value: '<TDZ>', isClosure: false, highlight: false, id: 'g2_tdz' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: false },
@@ -108,7 +117,8 @@ export const DEMO_STEPS: CodeStep[] = [
     scopeState: {
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
-        { name: 'myCounter', value: 'function 🎒', isClosure: false, highlight: true, id: 'g2' } // Unlocked!
+        { name: 'myCounter', value: 'function 🎒', isClosure: false, highlight: true, id: 'g2' }, // Unlocked!
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: true }
@@ -126,7 +136,8 @@ export const DEMO_STEPS: CodeStep[] = [
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
         { name: 'myCounter', value: 'function 🎒', isClosure: false, highlight: false, id: 'g2' },
-        { name: 'val1', value: 'undefined', isClosure: false, highlight: true, id: 'g3' }
+        { name: 'val1', value: 'undefined', isClosure: false, highlight: true, id: 'g3' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: false },
@@ -145,7 +156,8 @@ export const DEMO_STEPS: CodeStep[] = [
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
         { name: 'myCounter', value: 'function 🎒', isClosure: false, highlight: false, id: 'g2' },
-        { name: 'val1', value: 'undefined', isClosure: false, highlight: false, id: 'g3' }
+        { name: 'val1', value: 'undefined', isClosure: false, highlight: false, id: 'g3' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: false },
@@ -164,7 +176,8 @@ export const DEMO_STEPS: CodeStep[] = [
       global: [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
         { name: 'myCounter', value: 'function 🎒', isClosure: false, highlight: false, id: 'g2' },
-        { name: 'val1', value: 1, isClosure: false, highlight: true, id: 'g3' }
+        { name: 'val1', value: 1, isClosure: false, highlight: true, id: 'g3' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: true }
@@ -183,7 +196,8 @@ export const DEMO_STEPS: CodeStep[] = [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
         { name: 'myCounter', value: 'function 🎒', isClosure: false, highlight: false, id: 'g2' },
         { name: 'val1', value: 1, isClosure: false, highlight: false, id: 'g3' },
-        { name: 'val2', value: 'undefined', isClosure: false, highlight: true, id: 'g4' }
+        { name: 'val2', value: 'undefined', isClosure: false, highlight: true, id: 'g4' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: false },
@@ -203,7 +217,8 @@ export const DEMO_STEPS: CodeStep[] = [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
         { name: 'myCounter', value: 'function 🎒', isClosure: false, highlight: false, id: 'g2' },
         { name: 'val1', value: 1, isClosure: false, highlight: false, id: 'g3' },
-        { name: 'val2', value: 'undefined', isClosure: false, highlight: false, id: 'g4' }
+        { name: 'val2', value: 'undefined', isClosure: false, highlight: false, id: 'g4' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: false },
@@ -223,7 +238,8 @@ export const DEMO_STEPS: CodeStep[] = [
         { name: 'createCounter', value: 'function', isClosure: false, highlight: false, id: 'g1' },
         { name: 'myCounter', value: 'function 🎒', isClosure: false, highlight: false, id: 'g2' },
         { name: 'val1', value: 1, isClosure: false, highlight: false, id: 'g3' },
-        { name: 'val2', value: 2, isClosure: false, highlight: true, id: 'g4' }
+        { name: 'val2', value: 2, isClosure: false, highlight: true, id: 'g4' },
+        UNUSED_FN_VAR
       ],
       stack: [
         { name: 'Global (全局)', variables: [], id: 'main', isActive: true }

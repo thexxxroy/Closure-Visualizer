@@ -1,0 +1,5 @@
+{
+  "name": "Closure Visualizer",
+  "description": "An interactive, visual demonstration of JavaScript Closures. See how variables persist in memory after function execution using a step-by-step visualizer and AI-powered explanations.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,47 @@
+import React from 'react';
+import { Variable } from '../types';
+import { motion } from 'framer-motion';
+import { Box } from 'lucide-react';
+
+interface VariableBoxProps {
+  variable: Variable;
+}
+
+const VariableBox: React.FC<VariableBoxProps> = ({ variable }) => {
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ 
+        opacity: 1, 
+        x: 0,
+        scale: variable.highlight ? 1.05 : 1,
+        borderColor: variable.highlight ? '#ff00aa' : (variable.isClosure ? '#0aff68' : '#4a5568'),
+        boxShadow: variable.highlight ? '0 0 15px rgba(255, 0, 170, 0.3)' : 'none'
+      }}
+      className={`
+        relative border rounded-md p-2 flex justify-between items-center text-xs
+        shadow-sm transition-all duration-300 bg-gray-900 overflow-hidden
+      `}
+    >
+      {/* Background highlight effect */}
+      {variable.highlight && (
+        <div className="absolute inset-0 bg-neon-pink/10 animate-pulse"></div>
+      )}
+
+      <div className="flex items-center gap-2 z-10">
+        <Box size={12} className={variable.isClosure ? 'text-neon-green' : 'text-gray-500'} />
+        <span className="font-semibold text-gray-200">{variable.name}</span>
+      </div>
+      
+      <span className={`
+        font-mono z-10 px-2 py-0.5 rounded
+        ${variable.isClosure ? 'bg-neon-green/20 text-neon-green' : 'bg-gray-800 text-neon-blue'}
+      `}>
+        {variable.value}
+      </span>
+    </motion.div>
+  );
+};
+
+export default VariableBox;

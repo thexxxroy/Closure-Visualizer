@@ -20,12 +20,12 @@ const ScopeVisualizer: React.FC<ScopeVisualizerProps> = ({ scopeState }) => {
       
       {/* LEFT: Call Stack (The Execution Area) */}
       <div className="w-1/3 flex flex-col relative z-10" style={{ transform: 'rotateY(5deg)' }}>
-        <div className="flex flex-col gap-1 mb-4 pl-2 sticky top-0 z-30">
+        <div className="flex flex-col gap-1 mb-4 pl-2 sticky top-0 z-50 bg-gray-950/20 backdrop-blur-sm py-2">
           <div className="flex items-center gap-2 text-neon-blue uppercase tracking-widest font-bold text-xs">
             <Layers size={14} />
             <span>Execution Stack (执行栈)</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] text-gray-400 bg-gray-900/50 w-fit px-2 py-1 rounded border border-gray-800 backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 text-[10px] text-gray-400 bg-gray-900/80 w-fit px-2 py-1 rounded border border-gray-800 backdrop-blur-sm">
             <Zap size={10} className="text-yellow-400" />
             <span>临时车间：函数跑完立刻销毁</span>
           </div>
@@ -113,12 +113,12 @@ const ScopeVisualizer: React.FC<ScopeVisualizerProps> = ({ scopeState }) => {
 
       {/* RIGHT: Heap / Closure (The Backpack) */}
       <div className="w-1/3 flex flex-col relative z-10" style={{ transform: 'rotateY(-5deg)' }}>
-        <div className="flex flex-col gap-1 mb-4 pl-2 sticky top-0 z-30">
+        <div className="flex flex-col gap-1 mb-4 pl-2 sticky top-0 z-50 bg-gray-950/20 backdrop-blur-sm py-2">
           <div className="flex items-center gap-2 text-neon-green uppercase tracking-widest font-bold text-xs">
              <Database size={14} />
              <span>Heap Memory (堆内存)</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] text-gray-400 bg-gray-900/50 w-fit px-2 py-1 rounded border border-gray-800 backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 text-[10px] text-gray-400 bg-gray-900/80 w-fit px-2 py-1 rounded border border-gray-800 backdrop-blur-sm">
             <Save size={10} className="text-neon-green" />
             <span>永久仓库：被引用就存在</span>
           </div>
@@ -136,11 +136,11 @@ const ScopeVisualizer: React.FC<ScopeVisualizerProps> = ({ scopeState }) => {
                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
                    className={`
                      w-full bg-gray-800/80 backdrop-blur-md border-2 border-dashed border-neon-green/50 
-                     rounded-xl p-5 relative shadow-[0_0_30px_-5px_rgba(10,255,104,0.15)] mb-8
+                     rounded-xl px-5 pb-5 pt-16 relative shadow-[0_0_30px_-5px_rgba(10,255,104,0.15)] mb-8 mt-10
                    `}
                 >
                   {/* The Backpack Handle Visual */}
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gray-900 text-neon-green px-3 py-1 rounded-full border border-neon-green/30 flex items-center gap-2 shadow-lg z-20">
+                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-gray-900 text-neon-green px-4 py-1.5 rounded-full border border-neon-green/30 flex items-center gap-2 shadow-lg z-20 whitespace-nowrap">
                     <Package size={16} />
                     <span className="font-bold text-xs">Closure (闭包背包)</span>
                   </div>
@@ -163,7 +163,7 @@ const ScopeVisualizer: React.FC<ScopeVisualizerProps> = ({ scopeState }) => {
                 <motion.div 
                   initial={{ opacity: 0 }} 
                   animate={{ opacity: 1 }}
-                  className="text-gray-600 flex flex-col items-center gap-2 text-center mb-8"
+                  className="text-gray-600 flex flex-col items-center gap-2 text-center mb-8 mt-10"
                 >
                    <div className="w-16 h-16 rounded-full border-2 border-dashed border-gray-700 flex items-center justify-center">
                      <Package size={24} className="opacity-20" />
